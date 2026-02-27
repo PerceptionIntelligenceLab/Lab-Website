@@ -1,0 +1,52 @@
+.text-shadow {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+  transition: text-shadow 0.3s ease-in-out;
+}
+
+.cursive-dancing {
+  font-family: 'Dancing Script', cursive;
+}
+
+.cursive-vibes {
+  font-family: 'Great Vibes', cursive;
+}
+
+
+.cursive-pacifico {
+  font-family: 'Pacifico', cursive;
+}
+
+.logo-wordmark {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  word-spacing: 0.35em;
+  line-height: 1;
+}
+@media (min-width: 640px) {
+  .logo-wordmark {
+    font-size: 0.9375rem;
+  }
+}
+@media (min-width: 1024px) {
+  .logo-wordmark {
+    font-size: 1rem;
+  }
+}
+
+.cursive-italianno {
+  font-family: 'Italianno', cursive;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.gradient-header {
+  background: #e2f1ec;
+  background: -webkit-linear-gradient(to right, #e2f1ec, #75dfa5);
+  background: linear-gradient(to right, #e2f1ec, #75dfa5);
+  color: white;
+}
