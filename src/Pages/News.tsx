@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import logoImg from '../assets/LogoImage.png';
+import logoImg from '../assets/picture.jpeg';
 
 interface NewsItem {
   id: number;
