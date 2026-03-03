@@ -59,10 +59,10 @@ const Navbar: React.FC = () => {
   }, []);
 
 const navLinkClasses = () =>
-  "block px-2.5 py-2 rounded-sm font-medium text-white";
+  "block px-2.5 py-2 rounded-sm font-medium text-gray-800 hover:text-[#0ed6e8] transition-colors duration-200";
 
 const mobileNavLinkClasses = () =>
-  "block px-2.5 py-2 rounded-sm font-medium text-black";
+  "block px-2.5 py-2 rounded-sm font-medium text-gray-800 hover:text-[#0ed6e8] transition-colors duration-200";
 
   return (
     <div>
@@ -72,7 +72,7 @@ const mobileNavLinkClasses = () =>
           navbarVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <header className="flex flex-row items-center gap-6 py-2 px-6 bg-black/70 backdrop-blur-xl border border-white/30 w-fit rounded-4xl">
+        <header className="flex flex-row items-center gap-6 py-2 px-6 bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_4px_24px_rgba(0,0,0,0.06)] w-fit rounded-4xl">
           <NavLink to="/home" className={navLinkClasses}>Home</NavLink>
         <NavLink to="/news" className={navLinkClasses}>News</NavLink>
         <NavLink to="/research" className={navLinkClasses}>Research</NavLink>
@@ -85,7 +85,7 @@ const mobileNavLinkClasses = () =>
 
       
       <header
-        className={`w-full py-2 px-4 fixed top-0 z-50 flex flex-row items-center justify-between md:hidden bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm transition-transform duration-300 ease-in-out ${
+        className={`w-full py-2 px-4 fixed top-0 z-50 flex flex-row items-center justify-between md:hidden bg-white/20 backdrop-blur-xl border-b border-white/30 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-transform duration-300 ease-in-out ${
           navbarVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -93,7 +93,7 @@ const mobileNavLinkClasses = () =>
           <img src={logoImg} alt="perceptionintelligencelab" className="h-14 w-auto object-contain" />
         </NavLink>
         <button
-          className="text-black text-2xl focus:outline-none"
+          className="text-gray-800 text-2xl focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? "✕" : "☰"}
@@ -106,7 +106,7 @@ const mobileNavLinkClasses = () =>
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex flex-col gap-4 text-md p-6 pt-20 bg-white shadow-xl min-h-full">
+        <div className="flex flex-col gap-4 text-md p-6 pt-20 bg-white/20 backdrop-blur-xl border-l border-white/30 shadow-[0_4px_24px_rgba(0,0,0,0.06)] min-h-full">
           <NavLink to="/home" className={mobileNavLinkClasses}>Home</NavLink>
           <NavLink to="/news" className={mobileNavLinkClasses}>News</NavLink>
           <NavLink to="/research" className={mobileNavLinkClasses}>Research</NavLink>

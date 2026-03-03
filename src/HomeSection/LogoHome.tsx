@@ -15,7 +15,7 @@ const LogoHome: React.FC = () => {
             <span className="block mt-0 whitespace-nowrap">Intelligence Lab</span>
           </h1>
           <p className="mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-2xl">
-            Perception Intelligence Lab was founded by Prof. Debesh Jha in May 2026, located at the Department of Computer Science, University of South Dakota, Vermillion, SD.
+            Perception Intelligence Lab was founded by Dr. Debesh Jha in August 2025, located at the Department of Computer Science, University of South Dakota, Vermillion, SD.
           </p>
           <a
             href="#discover"
@@ -24,11 +24,11 @@ const LogoHome: React.FC = () => {
             Discover more
           </a>
         </div>
-        <div className="flex-1 flex justify-center md:justify-end order-1 md:order-2 w-full md:w-auto">
+        <div className="flex-1 flex justify-center md:justify-start order-1 md:order-2 w-full md:w-auto md:mt-10 md:-ml-8">
           <img
             src={logo}
             alt="Perception Intelligence Lab"
-            className="w-[75vw] max-w-xs sm:max-w-sm md:w-full md:max-w-2xl lg:max-w-3xl xl:max-w-4xl h-auto object-contain md:scale-125 md:origin-center"
+            className="w-[75vw] max-w-xs sm:max-w-sm md:w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl h-auto object-contain md:scale-110 md:origin-center"
           />
         </div>
       </div>
