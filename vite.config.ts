@@ -3,7 +3,10 @@ import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  base: '/MyWebPortfolio/',
+  // GitHub Pages serves from:
+  // https://<org>.github.io/<repo>/
+  // so this repo should be rooted at /Lab-Website/.
+  base: '/Lab-Website/',
   plugins: [
     react(),
     tailwindcss(),
