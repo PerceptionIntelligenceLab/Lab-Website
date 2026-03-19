@@ -180,13 +180,11 @@ const News: React.FC = () => {
   return (
     <main className="min-h-screen bg-white pb-24">
 
-      {/* ── Hero Banner ─────────────────────────────────────────────────────── */}
       <div className="w-full bg-[#daeef8] pt-24 pb-10 px-6">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
 
-          {/* Logo in rounded squircle */}
           <div className="relative flex-shrink-0">
-            <div className="w-64 md:w-80 h-56 md:h-72 bg-white/60 rounded-[40%_60%_60%_40%/_50%_50%_60%_40%] flex items-center justify-center overflow-hidden">
+            <div className="w-80 md:w-110 h-75 md:h-80 bg-[#daeef8] rounded-[40%_60%_60%_40%/_50%_50%_60%_40%] flex items-center justify-center overflow-hidden">
               <img
                 src={logoImg}
                 alt="Perception Intelligence Lab"
@@ -195,7 +193,6 @@ const News: React.FC = () => {
             </div>
           </div>
 
-          {/* Right: breadcrumb + title */}
           <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-left">
             <nav className="flex items-center gap-1.5 text-sm text-gray-500">
               <NavLink to="/home" className="hover:text-[#0ed6e8] transition-colors">Home</NavLink>
@@ -214,7 +211,6 @@ const News: React.FC = () => {
         </div>
       </div>
 
-      {/* ── News list ────────────────────────────────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-6 pt-12">
         <ol className="space-y-5">
           {newsItems.map((item, idx) => (
@@ -222,12 +218,11 @@ const News: React.FC = () => {
               key={item.id}
               className="flex gap-5 pb-5 border-b border-gray-100 last:border-0 group"
             >
-              {/* Number */}
+      
               <span className="text-gray-500 font-mono text-sm pt-0.5 min-w-[1.75rem] text-right select-none">
                 {idx + 1}.
               </span>
 
-              {/* Content */}
               <div className="flex-1 flex flex-col gap-1.5">
                 {item.tag && (
                   <span className={`self-start text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm ${tagColors[item.tag] ?? ''}`}>

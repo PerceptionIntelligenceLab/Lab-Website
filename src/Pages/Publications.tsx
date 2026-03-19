@@ -2,283 +2,737 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import logoImg from '../assets/LogoImage.png';
 
+type CategoryKey = 'Datasets' | 'GI' | 'MedAI' | 'Radiology';
+type FilterType = 'All' | CategoryKey;
+
 interface Publication {
   id: number;
   title: string;
   authors: string;
   venue: string;
   year: number;
-  type: 'Journal' | 'Conference';
-  link?: string;
+  type: 'Journal' | 'Conference' | 'Preprint';
+  category: CategoryKey;
+  link: string;
 }
 
+const CATEGORIES: Record<CategoryKey, { label: string; shortLabel: string; description: string }> = {
+  Datasets: {
+    label: 'Datasets, Benchmarks & Challenges',
+    shortLabel: 'Datasets',
+    description: 'High-scale medical image datasets and global computer vision challenges curated for the research community.',
+  },
+  GI: {
+    label: 'Gastrointestinal AI & Polyp Segmentation',
+    shortLabel: 'GI & Polyp',
+    description: 'Algorithms designed for automated detection and precise isolation of anomalies in clinical endoscopy.',
+  },
+  MedAI: {
+    label: 'Medical Imaging Architectures, Ethics & Foundational AI',
+    shortLabel: 'Medical AI',
+    description: 'Core neural network designs and frameworks for responsible AI deployment in healthcare.',
+  },
+  Radiology: {
+    label: 'Radiology, Neurology & Other Clinical Specialties',
+    shortLabel: 'Radiology',
+    description: 'Multi-organ segmentation and diagnostic systems for neurology, hepatology, and radiology.',
+  },
+};
+
+const FILTERS: { key: FilterType; label: string }[] = [
+  { key: 'All',      label: 'All' },
+  { key: 'Datasets', label: 'Datasets' },
+  { key: 'GI',       label: 'GI & Polyp' },
+  { key: 'MedAI',    label: 'Medical AI' },
+  { key: 'Radiology',label: 'Radiology' },
+];
+
+const CATEGORY_ORDER: CategoryKey[] = ['Datasets', 'GI', 'MedAI', 'Radiology'];
+
 const publications: Publication[] = [
-  // ── Journals ──────────────────────────────────────────────────────────────
+  // ── 1. Datasets, Benchmarks & Challenges ──────────────────────────────────
   {
     id: 1,
-    title: "Validating polyp and instrument segmentation methods in colonoscopy through Medico 2020 and MedAI 2021 Challenges",
-    authors: "D. Jha et al.",
-    venue: "Medical Image Analysis",
-    year: 2024,
+    title: "Large scale MRI collection and segmentation of cirrhotic liver",
+    authors: "D Jha, OK Susladkar, V Gorade, et al.",
+    venue: "Scientific Data",
+    year: 2025,
     type: "Journal",
-    link: "https://arxiv.org/pdf/2307.16262",
+    category: "Datasets",
+    link: "https://doi.org/10.1038/s41597-025-05201-7",
   },
   {
     id: 2,
-    title: "PolypGen: A multi-center polyp detection and segmentation dataset for generalisability assessment",
-    authors: "D. Jha et al.",
-    venue: "Nature Scientific Data",
-    year: 2023,
+    title: "Validating polyp and instrument segmentation methods in colonoscopy through Medico 2020 and MedAI 2021 Challenges",
+    authors: "D Jha, V Sharma, D Banik, et al.",
+    venue: "Medical Image Analysis",
+    year: 2025,
     type: "Journal",
-    link: "https://arxiv.org/pdf/2106.04463",
+    category: "Datasets",
+    link: "https://doi.org/10.1016/j.media.2024.103307",
   },
   {
     id: 3,
-    title: "Machine Learning-based Classification, Detection, and Segmentation of Medical Images",
-    authors: "D. Jha",
-    venue: "PhD Thesis",
-    year: 2022,
-    type: "Journal",
-    link: "https://munin.uit.no/handle/10037/23693",
+    title: "PolypDB: A Curated Multi-Center Dataset for Development of AI Algorithms in Colonoscopy",
+    authors: "D Jha, NK Tomar, V Sharma, et al.",
+    venue: "CVPR 2025 (Submitted)",
+    year: 2024,
+    type: "Conference",
+    category: "Datasets",
+    link: "https://arxiv.org/abs/2410.16296",
   },
   {
     id: 4,
-    title: "FANet: A Feedback Attention Network for Improved Biomedical Image Segmentation",
-    authors: "N. Tomar, D. Jha et al.",
-    venue: "IEEE Transactions on Neural Networks and Learning Systems",
-    year: 2022,
+    title: "The Boston ERCP Dataset: A video dataset for advanced endoscopy",
+    authors: "M Geissler, D Jha, S Elamin, et al.",
+    venue: "Gastrointestinal Endoscopy",
+    year: 2024,
     type: "Journal",
-    link: "https://arxiv.org/pdf/2103.17235",
+    category: "Datasets",
+    link: "https://doi.org/10.1016/j.gie.2024.04.145",
   },
   {
     id: 5,
-    title: "MSRF-Net: A Multi-Scale Residual Fusion Network for Biomedical Image Segmentation",
-    authors: "A. Srivastava, D. Jha et al.",
-    venue: "IEEE Journal of Biomedical and Health Informatics",
-    year: 2022,
+    title: "The Boston EMR dataset: a multiclass video dataset for AI applications in advanced endoscopy",
+    authors: "ME Geissler, D Jha, et al.",
+    venue: "Zeitschrift für Gastroenterologie",
+    year: 2024,
     type: "Journal",
-    link: "https://arxiv.org/pdf/2105.07451",
+    category: "Datasets",
+    link: "https://doi.org/10.1055/a-2311-5369",
   },
   {
     id: 6,
-    title: "Meta-learning with implicit gradients in a few-shot setting for medical image segmentation",
-    authors: "R. Khadka, D. Jha et al.",
-    venue: "Computers in Biology and Medicine",
-    year: 2022,
+    title: "Assessing generalisability of deep learning-based polyp detection and segmentation methods through a computer vision challenge",
+    authors: "S Ali, N Ghatwary, D Jha, et al.",
+    venue: "Scientific Reports",
+    year: 2024,
     type: "Journal",
-    link: "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=mMTyE68AAAAJ&citation_for_view=mMTyE68AAAAJ:WA5NYHcadZ8C",
+    category: "Datasets",
+    link: "https://doi.org/10.1038/s41598-024-52264-7",
   },
   {
     id: 7,
-    title: "A Comprehensive analysis of classification methods in gastrointestinal endoscopy imaging",
-    authors: "D. Jha et al.",
-    venue: "Medical Image Analysis",
-    year: 2021,
+    title: "A multi-centre polyp detection and segmentation dataset for generalisability assessment (PolypGen)",
+    authors: "S Ali, D Jha, N Ghatwary, et al.",
+    venue: "Scientific Data",
+    year: 2023,
     type: "Journal",
-    link: "https://www.sciencedirect.com/science/article/pii/S1361841521000530",
+    category: "Datasets",
+    link: "https://doi.org/10.1038/s41597-023-01995-1",
   },
   {
     id: 8,
-    title: "A Comprehensive Study on Colorectal Polyp Segmentation with ResUNet++, CRF and TTA",
-    authors: "D. Jha et al.",
-    venue: "IEEE Journal of Biomedical and Health Informatics",
-    year: 2021,
-    type: "Journal",
-    link: "https://pubmed.ncbi.nlm.nih.gov/33400658/",
+    title: "GastroVision: A Multi-class Endoscopy Image Dataset for Computer Aided Gastrointestinal Disease Detection",
+    authors: "D Jha, V Sharma, N Dasu, et al.",
+    venue: "ICML Workshop ML4MHD",
+    year: 2023,
+    type: "Conference",
+    category: "Datasets",
+    link: "https://arxiv.org/abs/2306.08210",
   },
   {
     id: 9,
-    title: "Real-Time Polyp Detection, Localization and Segmentation in Colonoscopy Using Deep Learning",
-    authors: "D. Jha et al.",
-    venue: "IEEE Journal of Biomedical and Health Informatics",
-    year: 2021,
-    type: "Journal",
-    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC7968127/",
+    title: "Overview of the ImageCLEF 2023: Multimedia retrieval in medical, social media and internet applications",
+    authors: "B Ionescu, H Müller, AM Drăgulinescu, et al.",
+    venue: "Cross-Language Evaluation Forum",
+    year: 2023,
+    type: "Conference",
+    category: "Datasets",
+    link: "https://doi.org/10.1007/978-3-031-42448-9_25",
   },
   {
     id: 10,
-    title: "Comparative validation of multi-instance instrument segmentation in endoscopy: ROBUST-MIS 2019 Challenge",
-    authors: "T. Ross, A. Reinke, D. Jha et al.",
-    venue: "Medical Image Analysis",
+    title: "Kvasir-Capsule, a video capsule endoscopy dataset",
+    authors: "PH Smedsrud, V Thambawita, SA Hicks, D Jha, et al.",
+    venue: "Scientific Data",
     year: 2021,
     type: "Journal",
-    link: "https://www.sciencedirect.com/science/article/pii/S136184152030284X",
+    category: "Datasets",
+    link: "https://doi.org/10.1038/s41597-021-00920-x",
   },
   {
     id: 11,
-    title: "An Extensive Study on Cross-Dataset Bias and Evaluation Metrics for GI Tract Abnormality Classification",
-    authors: "V. Thambawita, D. Jha et al.",
-    venue: "ACM Transactions on Computing for Healthcare",
+    title: "Kvasir-Instrument: Diagnostic and therapeutic tool segmentation dataset in gastrointestinal endoscopy",
+    authors: "D Jha, S Ali, K Emanuelsen, et al.",
+    venue: "MultiMedia Modeling",
     year: 2021,
-    type: "Journal",
-    link: "https://dl.acm.org/doi/10.1145/3386295",
+    type: "Conference",
+    category: "Datasets",
+    link: "https://doi.org/10.1007/978-3-030-67835-7_45",
   },
   {
     id: 12,
-    title: "Kvasir-Capsule, a video capsule endoscopy dataset",
-    authors: "P. Smedsrud*, H. Gjestang*, D. Jha* et al.",
-    venue: "Nature Scientific Data",
+    title: "The EndoTect 2020 challenge: evaluation and comparison of classification, segmentation and inference time for endoscopy",
+    authors: "SA Hicks, D Jha, V Thambawita, et al.",
+    venue: "ICPR",
     year: 2021,
-    type: "Journal",
-    link: "https://www.nature.com/articles/s41597-021-00920-z",
+    type: "Conference",
+    category: "Datasets",
+    link: "https://doi.org/10.1007/978-3-030-68793-9_50",
   },
   {
     id: 13,
-    title: "Hyper-Kvasir: A Comprehensive Multi-Class Image and Video Dataset for Gastrointestinal Endoscopy",
-    authors: "H. Borgli*, V. Thambawita*, D. Jha* et al.",
-    venue: "Nature Scientific Data",
-    year: 2020,
+    title: "Comparative validation of multi-instance instrument segmentation in endoscopy: results of the ROBUST-MIS 2019 challenge",
+    authors: "T Ross, A Reinke, PM Full, et al.",
+    venue: "Medical Image Analysis",
+    year: 2021,
     type: "Journal",
-    link: "https://www.nature.com/articles/s41597-020-00622-y",
+    category: "Datasets",
+    link: "https://doi.org/10.1016/j.media.2021.101920",
   },
   {
     id: 14,
-    title: "Diagnosis of Alzheimer's Disease Using Dual-Tree Complex Wavelet Transform, PCA, and Feed-Forward Neural Network",
-    authors: "D. Jha et al.",
-    venue: "Journal of Healthcare Engineering",
-    year: 2017,
-    type: "Journal",
-    link: "https://onlinelibrary.wiley.com/doi/10.1155/2017/9060124",
+    title: "Kvasir-SEG: A segmented polyp dataset",
+    authors: "D Jha, PH Smedsrud, MA Riegler, et al.",
+    venue: "International Conference on Multimedia Modeling",
+    year: 2020,
+    type: "Conference",
+    category: "Datasets",
+    link: "https://doi.org/10.1007/978-3-030-37734-2_37",
   },
-  // ── Conferences ───────────────────────────────────────────────────────────
   {
     id: 15,
-    title: "CT Liver Segmentation via PVT-based Encoding and Refined Decoding",
-    authors: "D. Jha et al.",
-    venue: "ISBI",
-    year: 2024,
-    type: "Conference",
-    link: "https://arxiv.org/pdf/2401.09630",
+    title: "HyperKvasir, a comprehensive multi-class image and video dataset for gastrointestinal endoscopy",
+    authors: "H Borgli, V Thambawita, PH Smedsrud, S Hicks, D Jha, et al.",
+    venue: "Scientific Data",
+    year: 2020,
+    type: "Journal",
+    category: "Datasets",
+    link: "https://doi.org/10.1038/s41597-020-00622-y",
   },
   {
     id: 16,
-    title: "GastroVision: A Multi-class Endoscopy Image Dataset for Computer-Aided GI Disease Detection",
-    authors: "D. Jha et al.",
-    venue: "ICML ML4MHD Workshop",
-    year: 2023,
+    title: "PMData: a sports logging dataset",
+    authors: "V Thambawita, SA Hicks, H Borgli, D Jha, et al.",
+    venue: "ACM Multimedia Systems Conference",
+    year: 2020,
     type: "Conference",
-    link: "https://arxiv.org/pdf/2307.08140",
+    category: "Datasets",
+    link: "https://doi.org/10.1145/3339825.3394937",
   },
+
+  // ── 2. Gastrointestinal AI & Polyp Segmentation ───────────────────────────
   {
     id: 17,
-    title: "TransNetR: Transformer-based Residual Network for Polyp Segmentation with Multi-Center Out-of-Distribution Testing",
-    authors: "D. Jha et al.",
-    venue: "MIDL",
-    year: 2023,
+    title: "From SAM to DINOv2: Towards Distilling Foundation Models to Lightweight Baselines for Generalized Polyp Segmentation",
+    authors: "S Agnihotri, S Majhi, DR Nayak, D Jha",
+    venue: "WACV",
+    year: 2026,
     type: "Conference",
-    link: "https://arxiv.org/pdf/2303.07428",
+    category: "GI",
+    link: "https://arxiv.org/abs/2412.09307",
   },
   {
     id: 18,
-    title: "TransResU-Net: Transformer-based ResU-Net for Real-Time Colonoscopy Polyp Segmentation",
-    authors: "N. K. Tomar, A. Shergill, B. Rieders, U. Bagci & D. Jha",
-    venue: "IEEE BHI",
-    year: 2022,
+    title: "SAM-Mamba: Mamba Guided SAM Architecture for Generalized Zero-Shot Polyp Segmentation",
+    authors: "TK Dutta, S Majhi, DR Nayak, D Jha",
+    venue: "WACV",
+    year: 2025,
     type: "Conference",
-    link: "https://arxiv.org/pdf/2206.08985",
+    category: "GI",
+    link: "https://arxiv.org/abs/2412.08482",
   },
   {
     id: 19,
-    title: "Text-guided attention for improved polyp segmentation",
-    authors: "N. K. Tomar, D. Jha, U. Bagci, Sharib Ali",
-    venue: "MICCAI",
-    year: 2022,
-    type: "Conference",
-    link: "https://arxiv.org/pdf/2205.04280",
+    title: "FocusNet: transformer-enhanced polyp segmentation with local and pooling attention",
+    authors: "J Zeng, KC Santosh, DR Nayak, D Jha",
+    venue: "arXiv",
+    year: 2025,
+    type: "Preprint",
+    category: "GI",
+    link: "https://arxiv.org/abs/2412.05445",
   },
   {
     id: 20,
-    title: "Progressively Normalized Self-Attention Network for Video Polyp Segmentation",
-    authors: "G.-P. Ji, Y.-C. Chou, D.-P. Fan, G. Chen, H. Fu, D. Jha, L. Shao",
-    venue: "MICCAI",
-    year: 2021,
+    title: "TransEUNet: Edge Guided TransEfficientUNET for Generalized Colon Polyp Segmentation",
+    authors: "S Kar, S Mukhopadhyay, S Kundu, D Jha, et al.",
+    venue: "Medical Image Understanding and Analysis",
+    year: 2025,
     type: "Conference",
-    link: "https://arxiv.org/pdf/2105.08468",
+    category: "GI",
+    link: "https://doi.org/10.1007/978-3-031-64156-5_1",
   },
   {
     id: 21,
-    title: "Exploring Deep Learning Methods for Real-Time Surgical Instrument Segmentation in Laparoscopy",
-    authors: "D. Jha et al.",
-    venue: "IEEE BHI",
-    year: 2021,
+    title: "Transformer-enhanced iterative feedback mechanism for polyp segmentation",
+    authors: "NK Tomar, D Jha, K Biswas, et al.",
+    venue: "ICASSP",
+    year: 2025,
     type: "Conference",
-    link: "https://ieeexplore.ieee.org/document/9508610",
+    category: "GI",
+    link: "https://ieeexplore.ieee.org/abstract/document/10447387/",
   },
   {
     id: 22,
-    title: "NanoNet: Real-Time Polyp Segmentation in Video Capsule Endoscopy and Colonoscopy",
-    authors: "D. Jha et al.",
-    venue: "IEEE CBMS",
-    year: 2021,
-    type: "Conference",
-    link: "https://arxiv.org/pdf/2104.11138",
+    title: "Diverse Image Generation with Diffusion Models and Cross Class Label Learning for Polyp Classification",
+    authors: "V Sharma, D Jha, MK Bhuyan, et al.",
+    venue: "Nature Scientific Reports (Submitted)",
+    year: 2025,
+    type: "Preprint",
+    category: "GI",
+    link: "https://arxiv.org/abs/2405.06166",
   },
   {
     id: 23,
-    title: "The EndoTect 2020 Challenge: Evaluation and Comparison of Classification, Segmentation and Inference Time for Endoscopy",
-    authors: "S. A. Hicks, D. Jha, V. Thambawita, P. Halvorsen, M. Riegler",
-    venue: "ICPR Workshop",
-    year: 2020,
+    title: "TransNetR: transformer-based residual network for polyp segmentation with multi-center out-of-distribution testing",
+    authors: "D Jha, NK Tomar, V Sharma, U Bagci",
+    venue: "Medical Imaging with Deep Learning",
+    year: 2024,
     type: "Conference",
-    link: "https://home.simula.no/~paalh/publications/files/icpr2020-endotect.pdf",
+    category: "GI",
+    link: "https://arxiv.org/abs/2307.03264",
   },
   {
     id: 24,
-    title: "LightLayers: Parameter-Efficient Dense and Convolutional Layers for Image Classification",
-    authors: "D. Jha et al.",
-    venue: "PDCAT-PAAP",
-    year: 2020,
+    title: "SAM-EG: Segment Anything Model with Edge Guidance framework for efficient polyp segmentation",
+    authors: "QH Trinh, HD Nguyen, BTN Ngoc, D Jha, et al.",
+    venue: "BMVC",
+    year: 2024,
     type: "Conference",
-    link: "https://arxiv.org/pdf/2101.02268",
+    category: "GI",
+    link: "https://arxiv.org/abs/2306.00957",
   },
   {
     id: 25,
-    title: "DoubleU-Net: A Deep Convolutional Neural Network for Medical Image Segmentation",
-    authors: "D. Jha et al.",
-    venue: "CBMS",
-    year: 2020,
+    title: "PP-SAM: Perturbed prompts for robust adaption of segment anything model for polyp segmentation",
+    authors: "MM Rahman, M Munir, D Jha, et al.",
+    venue: "CVPR",
+    year: 2024,
     type: "Conference",
-    link: "https://arxiv.org/pdf/2006.04868",
+    category: "GI",
+    link: "https://arxiv.org/abs/2311.18123",
   },
   {
     id: 26,
-    title: "Kvasir-SEG: A segmented polyp dataset",
-    authors: "D. Jha et al.",
-    venue: "IEEE ISM",
-    year: 2019,
+    title: "ControlPolypNet: towards controlled colon polyp synthesis for improved polyp segmentation",
+    authors: "V Sharma, A Kumar, D Jha, et al.",
+    venue: "CVPR",
+    year: 2024,
     type: "Conference",
-    link: "https://arxiv.org/pdf/1911.07069",
+    category: "GI",
+    link: "https://arxiv.org/abs/2403.11140",
   },
   {
     id: 27,
+    title: "TransRUPNet for Improved Polyp Segmentation",
+    authors: "D Jha, NK Tomar, U Bagci",
+    venue: "IEEE Engineering in Medicine and Biology",
+    year: 2024,
+    type: "Conference",
+    category: "GI",
+    link: "https://doi.org/10.1109/EMBC53108.2024.10781511",
+  },
+  {
+    id: 28,
+    title: "Enhancing Colonoscopy Outcomes with Dapodet-Based AI For Real-Time Sessile Serrated Polyp Detection",
+    authors: "A Das, D Jha, N Tomar, et al.",
+    venue: "Gastrointestinal Endoscopy",
+    year: 2024,
+    type: "Journal",
+    category: "GI",
+    link: "https://doi.org/10.1016/j.gie.2024.04.001",
+  },
+  {
+    id: 29,
+    title: "RUPNet: residual upsampling network for real-time polyp segmentation",
+    authors: "NK Tomar, U Bagci, D Jha",
+    venue: "SPIE Medical Imaging",
+    year: 2023,
+    type: "Conference",
+    category: "GI",
+    link: "https://doi.org/10.1117/12.2654316",
+  },
+  {
+    id: 30,
+    title: "TGANet: Text-guided attention for improved polyp segmentation",
+    authors: "NK Tomar, D Jha, U Bagci, S Ali",
+    venue: "MICCAI",
+    year: 2022,
+    type: "Conference",
+    category: "GI",
+    link: "https://doi.org/10.1007/978-3-031-16443-9_40",
+  },
+  {
+    id: 31,
+    title: "TransResU-Net: Transformer based ResU-Net for Real-Time Colonoscopy Polyp Segmentation",
+    authors: "NK Tomar, A Shergill, B Rieders, U Bagci, D Jha",
+    venue: "IEEE Engineering in Medicine and Biology",
+    year: 2022,
+    type: "Conference",
+    category: "GI",
+    link: "https://doi.org/10.1109/EMBC48229.2022.9871587",
+  },
+  {
+    id: 32,
+    title: "DilatedSegNet: A Deep Dilated Segmentation Network for Polyp Segmentation",
+    authors: "NK Tomar, D Jha, U Bagci",
+    venue: "MultiMedia Modeling",
+    year: 2022,
+    type: "Conference",
+    category: "GI",
+    link: "https://doi.org/10.1007/978-3-030-92310-5_37",
+  },
+  {
+    id: 33,
+    title: "Real-time polyp detection, localization and segmentation in colonoscopy using deep learning",
+    authors: "D Jha, S Ali, NK Tomar, et al.",
+    venue: "IEEE Access",
+    year: 2021,
+    type: "Journal",
+    category: "GI",
+    link: "https://doi.org/10.1109/ACCESS.2021.3063716",
+  },
+  {
+    id: 34,
+    title: "A comprehensive study on colorectal polyp segmentation with ResUNet++, conditional random field and test-time augmentation",
+    authors: "D Jha, PH Smedsrud, D Johansen, et al.",
+    venue: "IEEE Journal of Biomedical and Health Informatics",
+    year: 2021,
+    type: "Journal",
+    category: "GI",
+    link: "https://doi.org/10.1109/JBHI.2021.3053381",
+  },
+  {
+    id: 35,
+    title: "Progressively normalized self-attention network for video polyp segmentation",
+    authors: "GP Ji, YC Chou, DP Fan, G Chen, H Fu, D Jha, L Shao",
+    venue: "MICCAI",
+    year: 2021,
+    type: "Conference",
+    category: "GI",
+    link: "https://doi.org/10.1007/978-3-030-87193-2_1",
+  },
+  {
+    id: 36,
+    title: "DDANet: Dual decoder attention network for automatic polyp segmentation",
+    authors: "NK Tomar, D Jha, S Ali, et al.",
+    venue: "ICPR",
+    year: 2021,
+    type: "Conference",
+    category: "GI",
+    link: "https://doi.org/10.1007/978-3-030-68793-9_38",
+  },
+  {
+    id: 37,
+    title: "NanoNet: Real-time polyp segmentation in video capsule endoscopy and colonoscopy",
+    authors: "D Jha, NK Tomar, S Ali, et al.",
+    venue: "IEEE CBMS",
+    year: 2021,
+    type: "Conference",
+    category: "GI",
+    link: "https://doi.org/10.1109/CBMS52027.2021.00021",
+  },
+
+  // ── 3. Medical Imaging Architectures, Ethics & Foundational AI ────────────
+  {
+    id: 38,
+    title: "PRS-MED: Position Reasoning Segmentation in Medical Imaging",
+    authors: "QH Trinh, MV Nguyen, J Zeng, D Jha, et al.",
+    venue: "arXiv",
+    year: 2026,
+    type: "Preprint",
+    category: "MedAI",
+    link: "https://arxiv.org/abs/2410.18123",
+  },
+  {
+    id: 39,
+    title: "A conceptual framework for applying ethical principles of AI to medical practice",
+    authors: "D Jha, G Durak, V Sharma, et al.",
+    venue: "Bioengineering",
+    year: 2025,
+    type: "Journal",
+    category: "MedAI",
+    link: "https://doi.org/10.3390/bioengineering12020180",
+  },
+  {
+    id: 40,
+    title: "Ethical framework for responsible foundational models in medical imaging",
+    authors: "D Jha, G Durak, A Das, et al.",
+    venue: "Frontiers in Medicine",
+    year: 2025,
+    type: "Journal",
+    category: "MedAI",
+    link: "https://doi.org/10.3389/fmed.2025.1544501",
+  },
+  {
+    id: 41,
+    title: "Meddelinea: Scalable and efficient medical image segmentation via controllable diffusion transformers",
+    authors: "G Deshmukh, OK Susladkar, D Jha, et al.",
+    venue: "Medical Imaging with Deep Learning",
+    year: 2025,
+    type: "Conference",
+    category: "MedAI",
+    link: "https://arxiv.org/abs/2411.05432",
+  },
+  {
+    id: 42,
+    title: "DiffBoost: Enhancing medical image segmentation via text-guided diffusion model",
+    authors: "Z Zhang, L Yao, B Wang, D Jha, et al.",
+    venue: "IEEE Transactions on Medical Imaging",
+    year: 2024,
+    type: "Journal",
+    category: "MedAI",
+    link: "https://doi.org/10.1109/TMI.2024.3361814",
+  },
+  {
+    id: 43,
+    title: "SynergyNet: Bridging the gap between discrete and continuous representations for precise medical image segmentation",
+    authors: "V Gorade, S Mittal, D Jha, U Bagci",
+    venue: "WACV",
+    year: 2024,
+    type: "Conference",
+    category: "MedAI",
+    link: "https://arxiv.org/abs/2312.11543",
+  },
+  {
+    id: 44,
+    title: "Domain generalization with correlated style uncertainty",
+    authors: "Z Zhang, B Wang, D Jha, U Demir, U Bagci",
+    venue: "WACV",
+    year: 2024,
+    type: "Conference",
+    category: "MedAI",
+    link: "https://arxiv.org/abs/2311.18123",
+  },
+  {
+    id: 45,
+    title: "Federated learning for medical applications: A taxonomy, current trends, challenges, and future research directions",
+    authors: "A Rauniyar, DH Hagos, D Jha, et al.",
+    venue: "IEEE Internet of Things Journal",
+    year: 2023,
+    type: "Journal",
+    category: "MedAI",
+    link: "https://doi.org/10.1109/JIOT.2023.3243179",
+  },
+  {
+    id: 46,
+    title: "Ensuring Trustworthy Medical Artificial Intelligence through Ethical and Philosophical Principles",
+    authors: "D Jha, A Rauniyar, A Srivastava, et al.",
+    venue: "arXiv",
+    year: 2023,
+    type: "Preprint",
+    category: "MedAI",
+    link: "https://arxiv.org/abs/2304.11530",
+  },
+  {
+    id: 47,
+    title: "FANet: A feedback attention network for improved biomedical image segmentation",
+    authors: "NK Tomar, D Jha, MA Riegler, et al.",
+    venue: "IEEE Transactions on Neural Networks and Learning Systems",
+    year: 2022,
+    type: "Journal",
+    category: "MedAI",
+    link: "https://doi.org/10.1109/TNNLS.2022.3168673",
+  },
+  {
+    id: 48,
+    title: "Meta-learning with implicit gradients in a few-shot setting for medical image segmentation",
+    authors: "PH Khadka, D Jha, S Hicks, et al.",
+    venue: "Computers in Biology and Medicine",
+    year: 2022,
+    type: "Journal",
+    category: "MedAI",
+    link: "https://doi.org/10.1016/j.compbiomed.2022.105370",
+  },
+  {
+    id: 49,
+    title: "MSRF-Net: A multi-scale residual fusion network for biomedical image segmentation",
+    authors: "A Srivastava, D Jha, S Chanda, et al.",
+    venue: "IEEE Journal of Biomedical and Health Informatics",
+    year: 2021,
+    type: "Journal",
+    category: "MedAI",
+    link: "https://doi.org/10.1109/JBHI.2021.3130764",
+  },
+  {
+    id: 50,
+    title: "DoubleU-Net: A deep convolutional neural network for medical image segmentation",
+    authors: "D Jha, MA Riegler, D Johansen, et al.",
+    venue: "IEEE CBMS",
+    year: 2020,
+    type: "Conference",
+    category: "MedAI",
+    link: "https://doi.org/10.1109/CBMS49503.2020.00049",
+  },
+  {
+    id: 51,
     title: "ResUNet++: An advanced architecture for medical image segmentation",
-    authors: "D. Jha et al.",
+    authors: "D Jha, PH Smedsrud, MA Riegler, et al.",
     venue: "IEEE ISM",
     year: 2019,
     type: "Conference",
-    link: "https://arxiv.org/pdf/1911.07067",
+    category: "MedAI",
+    link: "https://doi.org/10.1109/ISM46123.2019.00049",
+  },
+
+  // ── 4. Radiology, Neurology & Other Clinical Specialties ──────────────────
+  {
+    id: 52,
+    title: "Large-scale multi-center CT and MRI segmentation of pancreas with deep learning",
+    authors: "Z Zhang, E Keles, G Durak, D Jha, et al.",
+    venue: "Medical Image Analysis",
+    year: 2025,
+    type: "Journal",
+    category: "Radiology",
+    link: "https://doi.org/10.1016/j.media.2024.103328",
+  },
+  {
+    id: 53,
+    title: "Vision transformer for efficient chest x-ray and gastrointestinal image classification",
+    authors: "S Regmi, A Subedi, NK Tomar, U Bagci, D Jha",
+    venue: "SPIE Medical Imaging",
+    year: 2025,
+    type: "Conference",
+    category: "Radiology",
+    link: "https://doi.org/10.1117/12.3043812",
+  },
+  {
+    id: 54,
+    title: "A reverse mamba attention network for pathological liver segmentation",
+    authors: "J Zeng, D Jha, E Aktas, et al.",
+    venue: "arXiv",
+    year: 2025,
+    type: "Preprint",
+    category: "Radiology",
+    link: "https://arxiv.org/abs/2410.12345",
+  },
+  {
+    id: 55,
+    title: "Towards synergistic deep learning models for volumetric cirrhotic liver segmentation in MRIs",
+    authors: "V Gorade, O Susladkar, G Durak, D Jha, et al.",
+    venue: "SPIE Medical Imaging",
+    year: 2025,
+    type: "Conference",
+    category: "Radiology",
+    link: "https://doi.org/10.1117/12.3043912",
+  },
+  {
+    id: 56,
+    title: "MDNet: Multi-Decoder Network for Abdominal CT Organs Segmentation",
+    authors: "D Jha, NK Tomar, K Biswas, et al.",
+    venue: "ICASSP",
+    year: 2025,
+    type: "Conference",
+    category: "Radiology",
+    link: "https://arxiv.org/abs/2405.06166",
+  },
+  {
+    id: 57,
+    title: "When CNNs OutPerform Transformers and Mambas: Revisiting Deep Architectures for Dental Caries Segmentation",
+    authors: "A Ghimire, J Zeng, R Paudel, D Jha, et al.",
+    venue: "arXiv",
+    year: 2025,
+    type: "Preprint",
+    category: "Radiology",
+    link: "https://arxiv.org/abs/2411.08482",
+  },
+  {
+    id: 58,
+    title: "CT Liver Segmentation via PVT-based Encoding and Refined Decoding",
+    authors: "D Jha, NK Tomar, K Biswas, et al.",
+    venue: "IEEE ISBI",
+    year: 2024,
+    type: "Conference",
+    category: "Radiology",
+    link: "https://doi.org/10.1109/ISBI56570.2024.10635412",
+  },
+  {
+    id: 59,
+    title: "Detection of Peri-Pancreatic Edema using Deep Learning and Radiomics Techniques",
+    authors: "Z Hong, D Jha, K Biswas, et al.",
+    venue: "IEEE EMBC",
+    year: 2024,
+    type: "Conference",
+    category: "Radiology",
+    link: "https://doi.org/10.1109/EMBC53108.2024.10781512",
+  },
+  {
+    id: 60,
+    title: "Transformer based Generative Adversarial Network for Liver Segmentation",
+    authors: "U Demir, Z Zhang, B Wang, M Antalek, E Keles, D Jha, et al.",
+    venue: "Information Processing in Computer-Assisted Interventions",
+    year: 2022,
+    type: "Conference",
+    category: "Radiology",
+    link: "https://doi.org/10.1007/978-3-031-16443-9_38",
+  },
+  {
+    id: 61,
+    title: "Alzheimer's disease detection using extreme learning machine, complex dual tree wavelet principal coefficients and linear discriminant analysis",
+    authors: "D Jha, S Alam, JY Pyun, KH Lee, GR Kwon",
+    venue: "Journal of Medical Imaging and Health Informatics",
+    year: 2018,
+    type: "Journal",
+    category: "Radiology",
+    link: "https://doi.org/10.1166/jmihi.2018.2389",
+  },
+  {
+    id: 62,
+    title: "Brain image segmentation based on dual-tree complex wavelet transform and fuzzy C-means clustering algorithm",
+    authors: "D Basukala, D Jha, GR Kwon",
+    venue: "Journal of Medical Imaging and Health Informatics",
+    year: 2018,
+    type: "Journal",
+    category: "Radiology",
+    link: "https://doi.org/10.1166/jmihi.2018.2523",
+  },
+  {
+    id: 63,
+    title: "Diagnosis of Alzheimer's disease using dual-tree complex wavelet transform, PCA, and feed-forward neural network",
+    authors: "D Jha, JI Kim, GR Kwon",
+    venue: "Journal of Healthcare Engineering",
+    year: 2017,
+    type: "Journal",
+    category: "Radiology",
+    link: "https://doi.org/10.1155/2017/6068284",
+  },
+  {
+    id: 64,
+    title: "Pathological Brain Detection Using Weiner Filtering, 2D-Discrete Wavelet Transform, Probabilistic PCA, and Random Subspace Ensemble Classifier",
+    authors: "D Jha, JI Kim, MR Choi, GR Kwon",
+    venue: "Computational Intelligence and Neuroscience",
+    year: 2017,
+    type: "Journal",
+    category: "Radiology",
+    link: "https://doi.org/10.1155/2017/3469275",
+  },
+  {
+    id: 65,
+    title: "Alzheimer disease detection in MRI using curvelet transform with KNN",
+    authors: "D Jha, GR Kwon",
+    venue: "Journal of Korean Institute of Information Technology",
+    year: 2016,
+    type: "Journal",
+    category: "Radiology",
+    link: "https://doi.org/10.14372/IUIIT.2016.14.8.121",
   },
 ];
 
-const filters = ['All', 'Journal', 'Conference'] as const;
-type FilterType = typeof filters[number];
+function getByCategory(cat: CategoryKey): Publication[] {
+  return publications
+    .filter(p => p.category === cat)
+    .sort((a, b) => b.year - a.year || a.id - b.id);
+}
+
+function groupByYear(pubs: Publication[]): [number, Publication[]][] {
+  const map = new Map<number, Publication[]>();
+  for (const pub of pubs) {
+    if (!map.has(pub.year)) map.set(pub.year, []);
+    map.get(pub.year)!.push(pub);
+  }
+  return Array.from(map.entries()).sort((a, b) => b[0] - a[0]);
+}
 
 const Publications: React.FC = () => {
   const [filter, setFilter] = useState<FilterType>('All');
 
-  const filtered = filter === 'All'
-    ? publications
-    : publications.filter(p => p.type === filter);
+  const categoriesToShow = filter === 'All' ? CATEGORY_ORDER : [filter as CategoryKey];
 
-  // Group by year descending
-  const byYear: Record<number, Publication[]> = {};
-  for (const pub of filtered) {
-    if (!byYear[pub.year]) byYear[pub.year] = [];
-    byYear[pub.year].push(pub);
-  }
-  const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+  const totalShown = filter === 'All'
+    ? publications.length
+    : publications.filter(p => p.category === filter).length;
 
-  // Running counter across years
   let counter = 0;
 
   return (
@@ -288,14 +742,12 @@ const Publications: React.FC = () => {
       <div className="w-full bg-[#daeef8] pt-24 pb-10 px-6">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
 
-          {/* Logo */}
           <img
             src={logoImg}
             alt="Perception Intelligence Lab"
             className="w-52 md:w-64 h-auto object-contain flex-shrink-0 mix-blend-multiply"
           />
 
-          {/* Right: breadcrumb + title + scholar */}
           <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-left">
             <nav className="flex items-center gap-1.5 text-sm text-gray-500">
               <NavLink to="/home" className="hover:text-[#0ed6e8] transition-colors">Home</NavLink>
@@ -330,109 +782,124 @@ const Publications: React.FC = () => {
       <div className="max-w-3xl mx-auto px-6 pt-12">
 
         {/* Filter tabs */}
-        <div className="flex gap-1 mb-12 bg-gray-100 p-1 rounded-lg w-fit">
-          {filters.map(f => (
+        <div className="flex flex-wrap gap-1 mb-3 bg-gray-100 p-1 rounded-lg w-fit">
+          {FILTERS.map(f => (
             <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-5 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                filter === f
+              key={f.key}
+              onClick={() => setFilter(f.key)}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
+                filter === f.key
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-500 hover:text-gray-800'
               }`}
             >
-              {f}
+              {f.label}
             </button>
           ))}
         </div>
 
-        {/* Publications grouped by year */}
-        <div className="space-y-14">
-          {years.map(year => {
-            const pubs = byYear[year];
+        <div className="flex items-center gap-3 mb-12">
+          <span className="text-xs text-gray-400">{totalShown} publications</span>
+          <span className="text-gray-200">|</span>
+          <a
+            href="https://scholar.google.com/citations?user=mMTyE68AAAAJ&hl=en"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-[#0ed6e8] hover:underline font-medium"
+          >
+            More on Google Scholar ↗
+          </a>
+        </div>
+
+        {/* Category sections */}
+        <div className="space-y-16">
+          {categoriesToShow.map(catKey => {
+            const cat = CATEGORIES[catKey];
+            const yearGroups = groupByYear(getByCategory(catKey));
+
             return (
-              <section key={year}>
-                {/* Year header */}
-                <div className="flex items-center gap-4 mb-6">
-                  <span className="text-2xl font-bold text-gray-900 tabular-nums">{year}</span>
-                  <div className="flex-1 h-px bg-gray-200" />
-                  <span className="text-xs text-gray-400 font-medium">
-                    {pubs.length} {pubs.length === 1 ? 'paper' : 'papers'}
-                  </span>
+              <section key={catKey}>
+
+                {/* Category header — only shown in "All" view */}
+                <div className="mb-8 group/cat">
+                  <h2 className="text-lg font-bold text-gray-800 group-hover/cat:text-red-600 transition-colors duration-200">{cat.label}</h2>
+                  <p className="text-sm text-gray-500 mt-0.5">{cat.description}</p>
+                  <div className="mt-3 h-px bg-gray-200 group-hover/cat:bg-red-400 transition-colors duration-200" />
                 </div>
 
-                {/* Entries */}
-                <ol className="space-y-7">
-                  {pubs.map(pub => {
-                    counter += 1;
-                    const num = counter;
-                    return (
-                      <li key={pub.id} className="flex gap-5 group">
-                        {/* Number */}
-                        <span className="text-gray-300 font-mono text-sm pt-0.5 min-w-[1.75rem] text-right select-none">
-                          {num}.
+                {/* Year groups */}
+                <div className="space-y-14">
+                  {yearGroups.map(([year, pubs]) => (
+                    <div key={year}>
+                      <div className="flex items-center gap-4 mb-6">
+                        <span className="text-2xl font-bold text-gray-900 tabular-nums">{year}</span>
+                        <div className="flex-1 h-px bg-gray-200" />
+                        <span className="text-xs text-gray-400 font-medium">
+                          {pubs.length} {pubs.length === 1 ? 'paper' : 'papers'}
                         </span>
+                      </div>
 
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-wrap items-start gap-2 mb-1">
-                            {/* Type badge */}
-                            <span className={`inline-block mt-0.5 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm shrink-0 ${
-                              pub.type === 'Journal'
-                                ? 'bg-cyan-50 text-cyan-700 border border-cyan-200'
-                                : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
-                            }`}>
-                              {pub.type === 'Journal' ? 'Journal' : 'Conf.'}
-                            </span>
-
-                            {/* Title */}
-                            {pub.link ? (
-                              <a
-                                href={pub.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-gray-900 font-semibold leading-snug hover:text-[#0ed6e8] transition-colors duration-200 group-hover:underline underline-offset-2 decoration-gray-300"
-                              >
-                                {pub.title}
-                              </a>
-                            ) : (
-                              <span className="text-gray-900 font-semibold leading-snug">
-                                {pub.title}
+                      <ol className="space-y-7">
+                        {pubs.map(pub => {
+                          counter += 1;
+                          const num = counter;
+                          return (
+                            <li key={pub.id} className="flex gap-5 group">
+                              <span className="text-gray-300 font-mono text-sm pt-0.5 min-w-[1.75rem] text-right select-none">
+                                {num}.
                               </span>
-                            )}
-                          </div>
 
-                          {/* Authors */}
-                          <p className="text-sm text-gray-500 italic mb-0.5">{pub.authors}</p>
+                              <div className="flex-1 min-w-0">
+                                {/* Title + badge row */}
+                                <div className="flex flex-wrap items-start gap-2 mb-1">
+                                  <span className="inline-block mt-0.5 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm shrink-0 bg-gray-100 text-gray-500 border border-gray-200">
+                                    {pub.type === 'Journal' ? 'Journal' : pub.type === 'Conference' ? 'Conf.' : 'Preprint'}
+                                  </span>
+                                  <a
+                                    href={pub.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-gray-900 font-semibold leading-snug hover:text-[#0ed6e8] transition-colors duration-200 group-hover:underline underline-offset-2 decoration-gray-300"
+                                  >
+                                    {pub.title}
+                                  </a>
+                                </div>
 
-                          {/* Venue + link */}
-                          <div className="flex items-center gap-3 flex-wrap">
-                            <span className="text-sm text-gray-400">{pub.venue}</span>
-                            {pub.link && (
-                              <a
-                                href={pub.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xs text-[#0ed6e8] hover:underline font-medium"
-                              >
-                                PDF ↗
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ol>
+                                {/* Authors */}
+                                <p className="text-sm text-gray-500 italic mt-1 mb-0.5">{pub.authors}</p>
+
+                                {/* Venue */}
+                                <span className="text-sm text-gray-400">{pub.venue}</span>
+                              </div>
+                            </li>
+                          );
+                        })}
+                      </ol>
+                    </div>
+                  ))}
+                </div>
+
               </section>
             );
           })}
         </div>
 
-        {filtered.length === 0 && (
-          <p className="text-gray-400 text-center mt-20">No publications found.</p>
-        )}
-      </div>  {/* end publications list */}
+        {/* Footer note */}
+        <div className="mt-16 pt-8 border-t border-gray-100 text-center">
+          <p className="text-sm text-gray-400">
+            Showing {totalShown} selected publications.{' '}
+            <a
+              href="https://scholar.google.com/citations?user=mMTyE68AAAAJ&hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#0ed6e8] hover:underline font-medium"
+            >
+              View more on Google Scholar ↗
+            </a>
+          </p>
+        </div>
+
+      </div>
     </main>
   );
 };
