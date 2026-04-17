@@ -76,12 +76,12 @@ const JoinUs: React.FC = () => {
                   <p className="text-xs font-semibold text-gray-800 group-hover:text-[#0ed6e8] transition-colors">Debesh Jha</p>
                 </div>
               </a>
-              <a href="https://debeshjha.github.io/MyWebPortfolio/" target="_blank" rel="noopener noreferrer"
+              <a href="https://debeshjha.com" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-xl hover:border-[#0ed6e8] hover:shadow-sm transition-all duration-200 group">
                 <FaGlobe className="text-xl text-[#0ed6e8]" />
                 <div>
                   <p className="text-xs text-gray-400">Portfolio</p>
-                  <p className="text-xs font-semibold text-gray-800 group-hover:text-[#0ed6e8] transition-colors">debeshjha.github.io</p>
+                  <p className="text-xs font-semibold text-gray-800 group-hover:text-[#0ed6e8] transition-colors">debeshjha.com</p>
                 </div>
               </a>
             </div>

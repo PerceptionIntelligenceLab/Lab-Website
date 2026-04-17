@@ -15,7 +15,7 @@ const LogoHome: React.FC = () => {
             <span className="block mt-0 whitespace-nowrap">Intelligence Lab</span>
           </h1>
           <p className="mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-2xl">
-            Perception Intelligence Lab was founded by Dr. Debesh Jha in August 2025, located at the Department of Computer Science, University of South Dakota, Vermillion, SD.
+            Perception Intelligence Lab was founded by Dr. Debesh Jha, located at the Department of Computer Science, <span className="text-red-600">University of South Dakota</span>, Vermillion, South Dakota, USA.
           </p>
           <a
             href="#discover"

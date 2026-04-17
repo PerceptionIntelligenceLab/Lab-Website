@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import logoImg from '../assets/LogoImage.png';
-
-type CategoryKey = 'Datasets' | 'GI' | 'MedAI' | 'Radiology';
-type FilterType = 'All' | CategoryKey;
 
 interface Publication {
   id: number;
@@ -12,42 +9,14 @@ interface Publication {
   venue: string;
   year: number;
   type: 'Journal' | 'Conference' | 'Preprint';
-  category: CategoryKey;
+  category: string;
   link: string;
+  abstract?: string;
+  keywords?: string[];
+  doiLink?: string;
+  pdfLink?: string;
+  codeLink?: string;
 }
-
-const CATEGORIES: Record<CategoryKey, { label: string; shortLabel: string; description: string }> = {
-  Datasets: {
-    label: 'Datasets, Benchmarks & Challenges',
-    shortLabel: 'Datasets',
-    description: 'High-scale medical image datasets and global computer vision challenges curated for the research community.',
-  },
-  GI: {
-    label: 'Gastrointestinal AI & Polyp Segmentation',
-    shortLabel: 'GI & Polyp',
-    description: 'Algorithms designed for automated detection and precise isolation of anomalies in clinical endoscopy.',
-  },
-  MedAI: {
-    label: 'Medical Imaging Architectures, Ethics & Foundational AI',
-    shortLabel: 'Medical AI',
-    description: 'Core neural network designs and frameworks for responsible AI deployment in healthcare.',
-  },
-  Radiology: {
-    label: 'Radiology, Neurology & Other Clinical Specialties',
-    shortLabel: 'Radiology',
-    description: 'Multi-organ segmentation and diagnostic systems for neurology, hepatology, and radiology.',
-  },
-};
-
-const FILTERS: { key: FilterType; label: string }[] = [
-  { key: 'All',      label: 'All' },
-  { key: 'Datasets', label: 'Datasets' },
-  { key: 'GI',       label: 'GI & Polyp' },
-  { key: 'MedAI',    label: 'Medical AI' },
-  { key: 'Radiology',label: 'Radiology' },
-];
-
-const CATEGORY_ORDER: CategoryKey[] = ['Datasets', 'GI', 'MedAI', 'Radiology'];
 
 const publications: Publication[] = [
   // ── 1. Datasets, Benchmarks & Challenges ──────────────────────────────────
@@ -709,31 +678,86 @@ const publications: Publication[] = [
   },
 ];
 
-function getByCategory(cat: CategoryKey): Publication[] {
-  return publications
-    .filter(p => p.category === cat)
-    .sort((a, b) => b.year - a.year || a.id - b.id);
+function uniqueStrings(values: string[]): string[] {
+  return Array.from(new Set(values.filter(Boolean)));
 }
 
-function groupByYear(pubs: Publication[]): [number, Publication[]][] {
-  const map = new Map<number, Publication[]>();
-  for (const pub of pubs) {
-    if (!map.has(pub.year)) map.set(pub.year, []);
-    map.get(pub.year)!.push(pub);
-  }
-  return Array.from(map.entries()).sort((a, b) => b[0] - a[0]);
+function inferKeywords(pub: Publication): string[] {
+  const titleTokens = pub.title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, ' ')
+    .split(/\s+/)
+    .filter(token => token.length > 4)
+    .slice(0, 5);
+
+  return uniqueStrings([
+    pub.category,
+    pub.type,
+    pub.venue,
+    ...titleTokens,
+    ...(pub.keywords ?? []),
+  ]);
+}
+
+function fallbackAbstract(pub: Publication): string {
+  return `${pub.title}. This ${pub.type.toLowerCase()} work by ${pub.authors} was presented in ${pub.venue} (${pub.year}) and contributes to ${pub.category}.`;
+}
+
+function previewAbstract(text: string): string {
+  const words = text.trim().split(/\s+/);
+  if (words.length <= 28) return text;
+  return `${words.slice(0, 28).join(' ')}...`;
 }
 
 const Publications: React.FC = () => {
-  const [filter, setFilter] = useState<FilterType>('All');
+  const [searchText, setSearchText] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
 
-  const categoriesToShow = filter === 'All' ? CATEGORY_ORDER : [filter as CategoryKey];
+  const normalizedPublications = useMemo(
+    () =>
+      publications.map(pub => ({
+        ...pub,
+        abstract: pub.abstract ?? fallbackAbstract(pub),
+        keywords: inferKeywords(pub),
+      })),
+    []
+  );
 
-  const totalShown = filter === 'All'
-    ? publications.length
-    : publications.filter(p => p.category === filter).length;
+  const categories = useMemo(
+    () => uniqueStrings(normalizedPublications.map(pub => pub.category)).sort((a, b) => a.localeCompare(b)),
+    [normalizedPublications]
+  );
 
-  let counter = 0;
+  const filteredPublications = useMemo(() => {
+    const query = searchText.trim().toLowerCase();
+
+    return normalizedPublications
+      .filter(pub => activeCategory === 'All' || pub.category === activeCategory)
+      .filter(pub => {
+        if (!query) return true;
+        const haystack = [
+          pub.title,
+          pub.authors,
+          pub.venue,
+          pub.category,
+          ...(pub.keywords ?? []),
+        ]
+          .join(' ')
+          .toLowerCase();
+        return haystack.includes(query);
+      })
+      .sort((a, b) => b.year - a.year || a.id - b.id);
+  }, [activeCategory, normalizedPublications, searchText]);
+
+  const toggleExpanded = (id: number) => {
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   return (
     <main className="min-h-screen bg-white pb-24">
@@ -779,27 +803,39 @@ const Publications: React.FC = () => {
       </div>
 
       {/* ── Publications list ────────────────────────────────────────────────── */}
-      <div className="max-w-3xl mx-auto px-6 pt-12">
+      <div className="max-w-7xl mx-auto px-6 pt-12">
+        <div className="flex flex-col gap-4 mb-6">
+          <label htmlFor="publication-search" className="text-sm font-medium text-gray-700">
+            Search Publications
+          </label>
+          <input
+            id="publication-search"
+            type="text"
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
+            placeholder="Search by title, author, keywords, or venue..."
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0ed6e8] focus:border-transparent"
+          />
+        </div>
 
-        {/* Filter tabs */}
-        <div className="flex flex-wrap gap-1 mb-3 bg-gray-100 p-1 rounded-lg w-fit">
-          {FILTERS.map(f => (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {['All', ...categories].map(category => (
             <button
-              key={f.key}
-              onClick={() => setFilter(f.key)}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                filter === f.key
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-800'
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
+                activeCategory === category
+                  ? 'bg-[#0ed6e8] text-white border-[#0ed6e8]'
+                  : 'bg-white text-gray-600 border-gray-300 hover:border-[#0ed6e8] hover:text-[#0ed6e8]'
               }`}
             >
-              {f.label}
+              {category}
             </button>
           ))}
         </div>
 
-        <div className="flex items-center gap-3 mb-12">
-          <span className="text-xs text-gray-400">{totalShown} publications</span>
+        <div className="flex items-center gap-3 mb-10">
+          <span className="text-xs text-gray-400">{filteredPublications.length} publications</span>
           <span className="text-gray-200">|</span>
           <a
             href="https://scholar.google.com/citations?user=mMTyE68AAAAJ&hl=en"
@@ -811,83 +847,98 @@ const Publications: React.FC = () => {
           </a>
         </div>
 
-        {/* Category sections */}
-        <div className="space-y-16">
-          {categoriesToShow.map(catKey => {
-            const cat = CATEGORIES[catKey];
-            const yearGroups = groupByYear(getByCategory(catKey));
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {filteredPublications.map(pub => {
+            const isExpanded = expandedIds.has(pub.id);
+            const abstractText = pub.abstract ?? '';
+            const actionLinks = [
+              { label: 'Paper', href: pub.link },
+              { label: 'PDF', href: pub.pdfLink },
+              { label: 'DOI', href: pub.doiLink },
+              { label: 'Code', href: pub.codeLink },
+            ].filter(link => Boolean(link.href));
 
             return (
-              <section key={catKey}>
-
-                {/* Category header — only shown in "All" view */}
-                <div className="mb-8 group/cat">
-                  <h2 className="text-lg font-bold text-gray-800 group-hover/cat:text-red-600 transition-colors duration-200">{cat.label}</h2>
-                  <p className="text-sm text-gray-500 mt-0.5">{cat.description}</p>
-                  <div className="mt-3 h-px bg-gray-200 group-hover/cat:bg-red-400 transition-colors duration-200" />
+              <article
+                key={pub.id}
+                className="rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow duration-200 bg-white"
+              >
+                <div className="flex flex-wrap gap-2 mb-3">
+                  <span className="text-[10px] uppercase tracking-wide font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+                    {pub.year}
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wide font-semibold px-2 py-1 rounded-full bg-[#e8f9fc] text-[#0e8d99]">
+                    {pub.type}
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wide font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+                    {pub.category}
+                  </span>
                 </div>
 
-                {/* Year groups */}
-                <div className="space-y-14">
-                  {yearGroups.map(([year, pubs]) => (
-                    <div key={year}>
-                      <div className="flex items-center gap-4 mb-6">
-                        <span className="text-2xl font-bold text-gray-900 tabular-nums">{year}</span>
-                        <div className="flex-1 h-px bg-gray-200" />
-                        <span className="text-xs text-gray-400 font-medium">
-                          {pubs.length} {pubs.length === 1 ? 'paper' : 'papers'}
-                        </span>
-                      </div>
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 leading-snug mb-2">
+                  {pub.title}
+                </h3>
 
-                      <ol className="space-y-7">
-                        {pubs.map(pub => {
-                          counter += 1;
-                          const num = counter;
-                          return (
-                            <li key={pub.id} className="flex gap-5 group">
-                              <span className="text-gray-300 font-mono text-sm pt-0.5 min-w-[1.75rem] text-right select-none">
-                                {num}.
-                              </span>
+                <p className="text-sm text-gray-600 mb-1">{pub.authors}</p>
+                <p className="text-sm text-gray-500 mb-3">
+                  {pub.venue}
+                </p>
 
-                              <div className="flex-1 min-w-0">
-                                {/* Title + badge row */}
-                                <div className="flex flex-wrap items-start gap-2 mb-1">
-                                  <span className="inline-block mt-0.5 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm shrink-0 bg-gray-100 text-gray-500 border border-gray-200">
-                                    {pub.type === 'Journal' ? 'Journal' : pub.type === 'Conference' ? 'Conf.' : 'Preprint'}
-                                  </span>
-                                  <a
-                                    href={pub.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-gray-900 font-semibold leading-snug hover:text-[#0ed6e8] transition-colors duration-200 group-hover:underline underline-offset-2 decoration-gray-300"
-                                  >
-                                    {pub.title}
-                                  </a>
-                                </div>
-
-                                {/* Authors */}
-                                <p className="text-sm text-gray-500 italic mt-1 mb-0.5">{pub.authors}</p>
-
-                                {/* Venue */}
-                                <span className="text-sm text-gray-400">{pub.venue}</span>
-                              </div>
-                            </li>
-                          );
-                        })}
-                      </ol>
-                    </div>
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {(pub.keywords ?? []).slice(0, 4).map(keyword => (
+                    <span
+                      key={`${pub.id}-${keyword}`}
+                      className="text-[10px] px-2 py-1 rounded bg-gray-50 border border-gray-200 text-gray-500"
+                    >
+                      {keyword}
+                    </span>
                   ))}
                 </div>
 
-              </section>
+                <button
+                  type="button"
+                  onClick={() => toggleExpanded(pub.id)}
+                  className="w-full text-left text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                >
+                  <span className="block leading-relaxed">
+                    {isExpanded ? abstractText : previewAbstract(abstractText)}
+                  </span>
+                  <span className="inline-block mt-2 text-xs font-medium text-[#0ed6e8]">
+                    {isExpanded ? 'Show less' : 'Full paper'}
+                  </span>
+                </button>
+
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-32 mt-4' : 'max-h-0'}`}
+                >
+                  <div className="flex flex-wrap gap-2">
+                    {actionLinks.map(link => (
+                      <a
+                        key={`${pub.id}-${link.label}`}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-medium text-[#0ed6e8] hover:underline"
+                      >
+                        {link.label} ↗
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </article>
             );
           })}
         </div>
 
-        {/* Footer note */}
+        {filteredPublications.length === 0 && (
+          <div className="text-center text-gray-500 py-14 border border-dashed border-gray-300 rounded-lg mt-2">
+            No publications match your search/filter.
+          </div>
+        )}
+
         <div className="mt-16 pt-8 border-t border-gray-100 text-center">
           <p className="text-sm text-gray-400">
-            Showing {totalShown} selected publications.{' '}
+            Showing {filteredPublications.length} publications.{' '}
             <a
               href="https://scholar.google.com/citations?user=mMTyE68AAAAJ&hl=en"
               target="_blank"
@@ -898,7 +949,6 @@ const Publications: React.FC = () => {
             </a>
           </p>
         </div>
-
       </div>
     </main>
   );
