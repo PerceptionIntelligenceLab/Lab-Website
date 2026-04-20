@@ -74,7 +74,6 @@ const mobileNavLinkClasses = () =>
       >
         <header className="flex flex-row items-center gap-6 py-2 px-6 bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_4px_24px_rgba(0,0,0,0.06)] w-fit rounded-4xl">
           <NavLink to="/home" className={navLinkClasses}>Home</NavLink>
-        <NavLink to="/news" className={navLinkClasses}>News</NavLink>
         <NavLink to="/research" className={navLinkClasses}>Research</NavLink>
         <NavLink to="/publications" className={navLinkClasses}>Publications</NavLink>
         <NavLink to="/courses" className={navLinkClasses}>Courses</NavLink>
@@ -108,7 +107,6 @@ const mobileNavLinkClasses = () =>
       >
         <div className="flex flex-col gap-4 text-md p-6 pt-20 bg-white/20 backdrop-blur-xl border-l border-white/30 shadow-[0_4px_24px_rgba(0,0,0,0.06)] min-h-full">
           <NavLink to="/home" className={mobileNavLinkClasses}>Home</NavLink>
-          <NavLink to="/news" className={mobileNavLinkClasses}>News</NavLink>
           <NavLink to="/research" className={mobileNavLinkClasses}>Research</NavLink>
           <NavLink to="/publications" className={mobileNavLinkClasses}>Publications</NavLink>
           <NavLink to="/courses" className={mobileNavLinkClasses}>Courses</NavLink>

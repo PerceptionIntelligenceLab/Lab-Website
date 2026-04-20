@@ -5,7 +5,7 @@ import LogoHome from "./Pages/LogoHome";
 import Publications from "./Pages/Publications";
 import Courses from "./Pages/Courses";
 import JoinUs from "./Pages/JoinUs";
-import News from "./Pages/News";
+import Research from "./Pages/Research";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -17,9 +17,9 @@ const App: React.FC = () => {
         <Route path="*" element={<LogoHome />} />
         <Route path="/" element={<LogoHome />} />
         <Route path="/home" element={<LogoHome />} />
-        <Route path="/news" element={<News />} />
         <Route path="/publications" element={<Publications />} />
         <Route path="/courses" element={<Courses />} />
+        <Route path="/research" element={<Research />} />
         <Route path="/join-us" element={<JoinUs />} />
       </Routes>
     </>
