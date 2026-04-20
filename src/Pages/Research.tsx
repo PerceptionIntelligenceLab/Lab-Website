@@ -1,20 +1,69 @@
+import { useEffect, useRef } from 'react';
+
+function LazyVideo({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.src = src;
+          el.load();
+          el.play().catch(() => {});
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [src]);
+
+  return (
+    <video
+      ref={videoRef}
+      muted
+      loop
+      playsInline
+      preload="none"
+      style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.8) contrast(1.1) saturate(1.1)' }}
+    />
+  );
+}
 
 const base = import.meta.env.BASE_URL;
 const vid = (name: string) => `${base}${name}`;
 
 const projects = [
   {
+    title: 'DentiMap',
+    video: vid('dentimap.mp4'),
+    link: 'https://perceptionintelligencelab.github.io/DiseaseVision/models/dentimap',
+    desc: 'DentiMap is an AI project that helps dentists detect cavities, infections, and other dental issues with greater accuracy. It analyzes X-ray scans, highlights problem areas, and supports faster, more precise diagnoses, bringing technology and care together for better oral health.',
+    side: 'left',
+  },
+  {
+    title: 'Polyp Detection',
+    video: vid('polyp.mp4'),
+    link: 'https://perceptionintelligencelab.github.io/DiseaseVision/models/polyp',
+    desc: 'Polyp Detection is a live AI tool that segments polyps in colonoscopy images in real time. Upload a frame and instantly receive a binary segmentation mask and a color overlay highlighting the detected polyp region, powered by a Kvasir-Seg trained model.',
+    side: 'right',
+  },
+  {
+    title: 'VCE Endoscopy Classification',
+    video: vid('vce-endo.mp4'),
+    link: 'https://perceptionintelligencelab.github.io/DiseaseVision/models/vce',
+    desc: 'VCE Endoscopy Classification is a live AI tool that classifies GI tract findings in capsule endoscopy frames. It identifies 13 conditions across the Kvasir-Capsule taxonomy using a DINOv2-based dual-stream classifier, returning confidence scores and a full probability distribution.',
+    side: 'left',
+    arrowStyle: { bottom: '0.5rem' },
+  },
+  {
     title: 'PanInsight',
     video: vid('paninsight ai.mp4'),
     link: 'https://debeshjha.github.io/PanInsight/',
     desc: 'PanInsight is an AI project that helps doctors detect pancreatic cancer earlier and with greater accuracy. It analyzes scans, highlights problem areas, and supports faster, more precise diagnoses, bringing technology and care together for better patient outcomes.',
-    side: 'left',
-  },
-  {
-    title: 'DentiMap',
-    video: vid('dentimap.mp4'),
-    link: 'https://debeshjha.github.io/DentiMap/',
-    desc: 'DentiMap is an AI project that helps dentists detect cavities, infections, and other dental issues with greater accuracy. It analyzes X-ray scans, highlights problem areas, and supports faster, more precise diagnoses, bringing technology and care together for better oral health.',
     side: 'right',
   },
   {
@@ -154,13 +203,6 @@ const css = `
     animation: rp-slide-left 1.2s cubic-bezier(0.4,0,0.2,1);
   }
 
-  .rp-video-box video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.8) contrast(1.1) saturate(1.1);
-  }
-
   .rp-video-overlay {
     position: absolute;
     inset: 0;
@@ -276,9 +318,7 @@ export default function Research() {
       {projects.map((p) => {
         const videoEl = (
           <div className="rp-video-box">
-            <video autoPlay muted loop playsInline>
-              <source src={p.video} type="video/mp4" />
-            </video>
+            <LazyVideo src={p.video} />
             <div className="rp-video-overlay" />
           </div>
         );
@@ -294,6 +334,7 @@ export default function Research() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rp-arrow-link"
+                style={(p as any).arrowStyle}
               >
                 <span className="rp-bouncing-arrow">→</span>
               </a>
