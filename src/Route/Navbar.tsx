@@ -76,6 +76,8 @@ const mobileNavLinkClasses = () =>
           <NavLink to="/home" className={navLinkClasses}>Home</NavLink>
         <NavLink to="/research" className={navLinkClasses}>Research</NavLink>
         <NavLink to="/publications" className={navLinkClasses}>Publications</NavLink>
+        <NavLink to="/code" className={navLinkClasses}>Code</NavLink>
+        <NavLink to="/datasets" className={navLinkClasses}>Datasets</NavLink>
         <NavLink to="/courses" className={navLinkClasses}>Courses</NavLink>
         <NavLink to="/people" className={navLinkClasses}>People</NavLink>
         <NavLink to="/join-us" className={navLinkClasses}>Join us</NavLink>
@@ -109,6 +111,8 @@ const mobileNavLinkClasses = () =>
           <NavLink to="/home" className={mobileNavLinkClasses}>Home</NavLink>
           <NavLink to="/research" className={mobileNavLinkClasses}>Research</NavLink>
           <NavLink to="/publications" className={mobileNavLinkClasses}>Publications</NavLink>
+          <NavLink to="/code" className={mobileNavLinkClasses}>Code</NavLink>
+          <NavLink to="/datasets" className={mobileNavLinkClasses}>Datasets</NavLink>
           <NavLink to="/courses" className={mobileNavLinkClasses}>Courses</NavLink>
           <NavLink to="/people" className={mobileNavLinkClasses}>People</NavLink>
           <NavLink to="/join-us" className={mobileNavLinkClasses}>Join us</NavLink>

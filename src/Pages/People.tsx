@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import debeshImg from '../assets/DebeshJha.png';
 import harshithImg from '../assets/Harshith.png';
 import saiImg from '../assets/Sai.png';
+import dipikaImg from '../assets/Dipika.jpeg';
 
 interface TeamMember {
   name: string;
@@ -30,6 +31,14 @@ const currentResearchers: TeamMember[] = [
     photoScale: 0.8,
     description:
       'Computer Science undergraduate at USD, contributing to AI and deep learning research under Dr. Debesh Jha.',
+  },
+  {
+    name: 'Dipika Ranabhat',
+    role: 'Graduate Student · Graduate Researcher in AI, USD',
+    image: dipikaImg,
+    portfolioLink: 'https://ranabhatdipika.com.np/',
+    description:
+      'Graduate student at USD conducting research in artificial intelligence under Dr. Debesh Jha at the Perception Intelligence Lab.',
   },
   {
     name: 'Swarna Sai Sankar',

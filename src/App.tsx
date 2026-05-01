@@ -8,6 +8,8 @@ import JoinUs from "./Pages/JoinUs";
 import Research from "./Pages/Research";
 import News from "./Pages/News";
 import People from "./Pages/People";
+import Code from "./Pages/Code";
+import Datasets from "./Pages/Datasets";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -25,6 +27,8 @@ const App: React.FC = () => {
         <Route path="/join-us" element={<JoinUs />} />
         <Route path="/news" element={<News />} />
         <Route path="/people" element={<People />} />
+        <Route path="/code" element={<Code />} />
+        <Route path="/datasets" element={<Datasets />} />
       </Routes>
     </>
   );
