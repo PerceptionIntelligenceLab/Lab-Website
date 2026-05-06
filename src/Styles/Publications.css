@@ -1,0 +1,396 @@
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&display=swap');
+
+.pub-root {
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.pub-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 100px 48px 96px;
+  color: #222222;
+  font-family: 'Libre Franklin', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* ── Header ── */
+.pub-header {
+  margin-bottom: 40px;
+}
+
+.pub-name {
+  font-family: 'Fjalla One', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 2.6rem;
+  font-weight: 400;
+  color: #111111;
+  margin: 0 0 6px;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.pub-affiliation {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #c0392b;
+  margin: 0 0 14px;
+  letter-spacing: 0.01em;
+}
+
+.pub-research-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.pub-tag {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #52c2c8;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pub-tag-pipe {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.72rem;
+  color: #cccccc;
+  padding: 0 6px;
+  user-select: none;
+}
+
+.pub-header-meta {
+  margin-top: 10px;
+}
+
+.pub-scholar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.18), 0 1px 3px 1px rgba(60, 64, 67, 0.10);
+  text-decoration: none;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.pub-scholar-btn:hover {
+  box-shadow: 0 2px 6px rgba(60, 64, 67, 0.22), 0 2px 8px 2px rgba(60, 64, 67, 0.14);
+  border-color: #c6c9cc;
+}
+
+.pub-scholar-btn span {
+  font-family: 'Roboto', 'Libre Franklin', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #3c4043;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* ── Dividers ── */
+.pub-hr {
+  border: none;
+  border-top: 1px solid #e8e8e8;
+  margin: 0 0 28px;
+}
+
+/* ── Filter bar ── */
+.pub-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 10px;
+}
+
+.pub-pipe {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.75rem;
+  color: #cccccc;
+  padding: 0 6px;
+  user-select: none;
+}
+
+.pub-filter-btn {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #888888;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 2px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+  line-height: 1.4;
+}
+
+.pub-filter-btn:hover {
+  color: #52c2c8;
+}
+
+.pub-filter-active {
+  color: #52c2c8;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+
+.pub-meta-count {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.75rem;
+  color: #aaaaaa;
+  margin: 0 0 44px;
+  letter-spacing: 0.01em;
+}
+
+.pub-inline-link {
+  color: #52c2c8;
+  text-decoration: none;
+  border-bottom: 1px solid #b8e8ea;
+  transition: border-color 0.15s;
+}
+
+.pub-inline-link:hover {
+  border-bottom-color: #52c2c8;
+}
+
+/* ── Year section ── */
+.pub-year-section {
+  margin-bottom: 52px;
+}
+
+.pub-year-heading {
+  font-family: 'Fjalla One', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: #111111;
+  margin: 0 0 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.pub-year-rule {
+  border: none;
+  border-top: 2.5px solid #52c2c8;
+  margin: 0 0 28px;
+  width: 48px;
+}
+
+/* ── Publication list ── */
+.pub-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pub-entry {
+  padding-bottom: 32px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.pub-entry:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.pub-body {
+  max-width: 800px;
+}
+
+.pub-title {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #1a1a1a;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 6px;
+  transition: color 0.15s;
+}
+
+.pub-title:hover {
+  color: #52c2c8;
+}
+
+.pub-byline {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.875rem;
+  color: #444444;
+  margin: 0 0 10px;
+  line-height: 1.55;
+}
+
+.pub-pi-name {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.pub-venue-span {
+  font-style: italic;
+  color: #666666;
+}
+
+.pub-year-span {
+  color: #888888;
+}
+
+.pub-type-badge {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  vertical-align: middle;
+}
+
+/* ── Action links ── */
+.pub-action-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 8px;
+}
+
+.pub-action {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #52c2c8;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: opacity 0.15s;
+  border-bottom: 1px solid transparent;
+}
+
+.pub-action:hover {
+  border-bottom-color: #52c2c8;
+  opacity: 0.8;
+}
+
+.pub-action-sep {
+  font-size: 0.78rem;
+  color: #cccccc;
+  padding: 0 8px;
+  user-select: none;
+}
+
+.pub-action-btn {
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #52c2c8;
+  letter-spacing: 0.01em;
+  transition: opacity 0.15s;
+}
+
+.pub-action-btn:hover {
+  border-bottom-color: #52c2c8;
+  opacity: 0.8;
+}
+
+/* ── BibTeX block ── */
+.pub-bibtex {
+  margin-top: 14px;
+  background-color: #f8fafa;
+  border-left: 3px solid #52c2c8;
+  padding: 12px 14px 10px;
+}
+
+.pub-bibtex-text {
+  font-family: 'Courier New', 'Courier', monospace;
+  font-size: 0.68rem;
+  color: #333333;
+  margin: 0 0 8px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.7;
+}
+
+.pub-copy-btn {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #52c2c8;
+  background: none;
+  border: 1px solid #b8e8ea;
+  cursor: pointer;
+  padding: 3px 10px;
+  letter-spacing: 0.02em;
+  transition: background-color 0.15s;
+}
+
+.pub-copy-btn:hover {
+  background-color: #f0fafa;
+}
+
+/* ── Empty state ── */
+.pub-empty {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.9rem;
+  color: #aaaaaa;
+  text-align: center;
+  padding: 56px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 40px;
+}
+
+/* ── Footer ── */
+.pub-footer {
+  margin-top: 48px;
+}
+
+.pub-footer p {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.75rem;
+  color: #aaaaaa;
+  text-align: center;
+  line-height: 1.6;
+  margin: 12px 0 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .pub-main {
+    padding: 84px 24px 64px;
+  }
+
+  .pub-name {
+    font-size: 2rem;
+  }
+
+  .pub-year-heading {
+    font-size: 1.9rem;
+  }
+
+  .pub-filter-btn {
+    font-size: 0.67rem;
+  }
+
+  .pub-pipe {
+    padding: 0 4px;
+  }
+}

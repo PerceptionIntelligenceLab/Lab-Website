@@ -212,18 +212,6 @@ const css = `
     margin-bottom: 14px;
   }
 
-  .dsx-head h2 {
-    margin: 0;
-    font-size: clamp(20px, 2.4vw, 34px);
-    letter-spacing: .2px;
-    line-height: 1.15;
-    background: linear-gradient(90deg, #2563eb, #7c3aed);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    font-weight: 800;
-  }
-
   .dsx-controls {
     display: grid;
     gap: 12px;
@@ -256,24 +244,22 @@ const css = `
   }
 
   .dsx-chip {
-    background: linear-gradient(180deg, #f4f6f8, #eceff3);
-    border: 1px solid #e5e9ef;
-    color: #334155;
+    background: #f4f5f7;
+    border: 1px solid #dfe3e8;
+    color: #0b1220;
     padding: 8px 12px;
     border-radius: 999px;
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: transform .12s, border .2s;
+    transition: border .2s;
     font-family: inherit;
   }
 
-  .dsx-chip:hover { transform: translateY(-1px); }
-
   .dsx-chip.active {
-    border-color: #2b6cff;
+    border-color: #0b1220;
     color: #0b1220;
-    background: #eef3ff;
+    background: #f4f5f7;
     font-weight: 600;
   }
 
@@ -297,22 +283,12 @@ const css = `
     flex-direction: column;
     transform: translateY(10px);
     opacity: 0;
-    transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s, box-shadow .25s ease, border-color .25s;
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s;
   }
 
   .dsx-card.dsx-in {
     opacity: 1;
     transform: translateY(0);
-  }
-
-  .dsx-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 40px rgba(16,24,40,.12);
-    border-color: #dde3eb;
-  }
-
-  .dsx-card.dsx-in:hover {
-    transform: translateY(-6px);
   }
 
   .dsx-media {
@@ -328,10 +304,7 @@ const css = `
     object-fit: contain;
     display: block;
     padding: 8px;
-    transition: transform .35s ease;
   }
-
-  .dsx-card:hover .dsx-media img { transform: scale(1.04); }
 
   .dsx-badge {
     position: absolute;
@@ -380,9 +353,9 @@ const css = `
 
   .dsx-tag {
     font-size: 12px;
-    color: #1d4ed8;
-    background: #eef2ff;
-    border: 1px solid #e0e7ff;
+    color: #0b1220;
+    background: #f4f5f7;
+    border: 1px solid #dfe3e8;
     padding: 4px 10px;
     border-radius: 999px;
     font-weight: 500;
@@ -404,15 +377,9 @@ const css = `
     font-weight: 600;
     font-size: 13px;
     color: #0b1220;
-    background: #eef3ff;
-    border: 1px solid #d5e4ff;
-    transition: transform .12s ease, background .2s;
+    background: #f4f5f7;
+    border: 1px solid #dfe3e8;
     font-family: inherit;
-  }
-
-  .dsx-action-btn:hover {
-    transform: translateY(-2px);
-    background: #ffffff;
   }
 
   .dsx-empty {
@@ -506,7 +473,6 @@ export default function Datasets() {
       <style>{css}</style>
       <div className="dsx-inner">
         <div className="dsx-head">
-          <h2>Open Datasets</h2>
           <div className="dsx-controls">
             <input
               className="dsx-search-box"
