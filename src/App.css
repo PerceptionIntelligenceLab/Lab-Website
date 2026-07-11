@@ -7,8 +7,8 @@ html, body {
   min-height: 100%;
   overflow-x: hidden;
   background: white;
-  background-size: 400% 400%;
   color: black;
+  font-family: 'DM Sans', 'Helvetica Neue', system-ui, sans-serif;
 }
 
 #root {
@@ -16,82 +16,50 @@ html, body {
   width: 100%;
 }
 
-.circles-bg {
+html { scroll-behavior: smooth; }
+
+.skip-link {
   position: absolute;
+  left: -9999px;
   top: 0;
+  z-index: 100;
+  padding: 12px 20px;
+  background: #0ed6e8;
+  color: white;
+  font-weight: 600;
+  border-radius: 0 0 8px 0;
+  text-decoration: none;
+}
+
+.skip-link:focus {
   left: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
+  outline: 3px solid #0a2540;
 }
 
-.circles-bg span {
+.sr-only {
   position: absolute;
-  display: block;
-  width: 30px;
-  height: 30px;
-  background: #10b981;
-  border-radius: 50%;
-  animation: float 20s linear infinite;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-
-.circles-bg span:nth-child(1) {
-  top: 100%;
-  left: 10%;
-  width: 40px;
-  height: 40px;
-  animation-duration: 22s;
-}
-.circles-bg span:nth-child(2) {
-  top: 110%;
-  left: 25%;
-  animation-duration: 18s;
-}
-.circles-bg span:nth-child(3) {
-  top: 120%;
-  left: 40%;
-  width: 60px;
-  height: 60px;
-  animation-duration: 25s;
-}
-.circles-bg span:nth-child(4) {
-  top: 115%;
-  left: 55%;
-  animation-duration: 20s;
-}
-.circles-bg span:nth-child(5) {
-  top: 105%;
-  left: 70%;
-  width: 35px;
-  height: 35px;
-  animation-duration: 23s;
+.route-fallback {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-
-@keyframes float {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(-130vh) scale(0.8);
-    opacity: 0;
-  }
-}
-@keyframes gradientMotion {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

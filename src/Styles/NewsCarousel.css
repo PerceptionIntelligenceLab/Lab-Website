@@ -1,0 +1,268 @@
+.news-track-outer {
+  padding: 2.5rem 3rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.news-track-outer::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  background: linear-gradient(to left, #f0f7fb, transparent);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.news-track { overflow: hidden; }
+
+.news-track-inner {
+  display: flex;
+  gap: 1.8rem;
+  width: max-content;
+  align-items: stretch;
+  padding-bottom: 1.5rem;
+  animation: newsScroll 140s linear infinite;
+}
+
+.news-track-inner.is-paused,
+.news-track-inner.is-dragging { animation-play-state: paused; }
+.news-track-inner.is-dragging { cursor: grabbing; }
+
+@keyframes newsScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.news-card {
+  flex-shrink: 0;
+  width: 340px;
+  background: #fff;
+  border: 1.5px solid #d1e8f2;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.news-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 6px 14px 0 #1a7bbf44;
+  border-color: #1a7bbf;
+}
+
+.news-card-img {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  background: #e8f4fb;
+}
+
+.news-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s ease;
+  padding: 4px;
+}
+
+.news-card:hover .news-card-img img { transform: scale(1.08); }
+
+.news-card-cat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+}
+
+.news-card-num {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.1em;
+}
+
+.news-card-body {
+  padding: 1.3rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.7rem;
+}
+
+.news-card-meta { display: flex; align-items: center; gap: 0.6rem; }
+
+.news-card-source {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a7bbf;
+}
+
+.news-card-dot { width: 3px; height: 3px; border-radius: 50%; background: #a0c4d8; }
+
+.news-card-time {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  color: #7faec4;
+}
+
+.news-card-headline {
+  font-family: 'Lora', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #1a3a50;
+  letter-spacing: -0.01em;
+}
+
+.news-card-excerpt {
+  font-family: 'Lora', serif;
+  font-size: 0.8rem;
+  line-height: 1.75;
+  color: #4a7a94;
+  flex: 1;
+}
+
+.news-card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.news-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid #c0dcea;
+  color: #1a7bbf;
+  background: #f0f7fb;
+  border-radius: 1px;
+}
+
+.news-card-footer {
+  border-top: 1px solid #daeef8;
+  padding: 0.85rem 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.news-read-link {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #1a7bbf;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: gap 0.2s;
+  padding: 0;
+}
+
+.news-read-link:hover { gap: 0.85rem; }
+
+.news-read-arrow { font-size: 0.88rem; transition: transform 0.2s; }
+.news-read-link:hover .news-read-arrow { transform: translateX(4px); }
+
+.news-subheader {
+  border-bottom: 2px solid #1a7bbf33;
+  padding: 1.5rem 3rem 1.2rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.news-subheader-left h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 900;
+  color: #1a3a50;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.news-subheader-left h2 span { color: #1a7bbf; }
+
+.news-subheader-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: #7faec4;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.news-nav-btn {
+  width: 38px;
+  height: 38px;
+  background: none;
+  border: 2px solid #1a7bbf;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  color: #1a7bbf;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.news-nav-btn:hover { background: #1a7bbf; color: #fff; }
+.news-nav-btn:focus-visible { outline: 2px solid #0ed6e8; outline-offset: 2px; }
+
+.news-footer-bar {
+  border-top: 1.5px solid #1a7bbf22;
+  padding: 0.9rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.news-footer-bar p {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  color: #7faec4;
+  letter-spacing: 0.14em;
+}
+
+.news-footer-bar strong { color: #1a7bbf; }
+
+@media (max-width: 640px) {
+  .news-track-outer { padding: 1.5rem 1rem; }
+  .news-subheader {
+    padding: 1.2rem 1rem 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .news-footer-bar { padding: 0.8rem 1rem; }
+  .news-card { width: 290px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-track-inner { animation: none !important; }
+  .news-card, .news-card-img img { transition: none !important; }
+}

@@ -1,20 +1,19 @@
-import { BrowserRouter } from 'react-router-dom'
-import { createRoot } from 'react-dom/client'
-import './App.css'
-import App from './App'
-import "@fontsource/pacifico";
-import React from 'react';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import './App.css';
 
-createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <BrowserRouter
-      basename={
-        import.meta.env.BASE_URL.endsWith('/')
-          ? import.meta.env.BASE_URL.slice(0, -1)
-          : import.meta.env.BASE_URL
-      }
-    >
+const stripTrailingSlash = (value: string): string =>
+  value.endsWith('/') && value.length > 1 ? value.slice(0, -1) : value;
+
+const container = document.getElementById('root');
+if (!container) throw new Error('Root element #root not found');
+
+createRoot(container).render(
+  <StrictMode>
+    <BrowserRouter basename={stripTrailingSlash(import.meta.env.BASE_URL)}>
       <App />
     </BrowserRouter>
-  </React.StrictMode>
-)
+  </StrictMode>
+);

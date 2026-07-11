@@ -1,0 +1,178 @@
+.people-page {
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 24px 80px;
+  font-family: 'DM Sans', 'Helvetica Neue', sans-serif;
+}
+
+.people-header {
+  text-align: center;
+  margin-bottom: 64px;
+  width: 100%;
+  max-width: 1200px;
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(-30px);
+  opacity: 0;
+}
+
+.people-header.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.people-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 20px;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.people-subtitle {
+  font-size: 17px;
+  color: #999;
+  max-width: 480px;
+  line-height: 1.7;
+  margin: 0 auto;
+}
+
+.people-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 56px;
+  max-width: 1200px;
+  width: 100%;
+  margin-bottom: 100px;
+}
+
+.people-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 280px;
+  max-width: 340px;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(60px);
+  opacity: 0;
+}
+
+.people-card.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.people-photo {
+  position: relative;
+  width: 270px;
+  height: 270px;
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 32px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.people-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(15%);
+}
+
+.people-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0, 0, 0, 0.08) 100%);
+}
+
+.people-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.people-role {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #999;
+  margin-bottom: 20px;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+.people-divider {
+  width: 30px;
+  height: 2px;
+  background: #1a1a1a;
+  margin-bottom: 20px;
+  border-radius: 1px;
+}
+
+.people-desc {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #666;
+  text-align: center;
+  margin: 0;
+  max-width: 300px;
+}
+
+.people-link {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2563eb;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+.people-link:hover { opacity: 1; text-decoration: underline; }
+
+.alumni-section {
+  width: 100%;
+  max-width: 1200px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 64px;
+  text-align: center;
+}
+
+.alumni-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+
+.alumni-empty {
+  min-height: 120px;
+  color: #cbd5e1;
+  font-size: 15px;
+  font-style: italic;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .people-header, .people-card { transition: none !important; opacity: 1 !important; transform: none !important; }
+}

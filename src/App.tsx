@@ -1,26 +1,30 @@
-import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import Navbar from "./Route/Navbar";
-import LogoHome from "./Pages/LogoHome";
-import Publications from "./Pages/Publications";
-import Courses from "./Pages/Courses";
-import JoinUs from "./Pages/JoinUs";
-import Research from "./Pages/Research";
-import News from "./Pages/News";
-import People from "./Pages/People";
-import Code from "./Pages/Code";
-import Datasets from "./Pages/Datasets";
+import { lazy, Suspense } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import Navbar from './Route/Navbar';
 
-const App: React.FC = () => {
-  const location = useLocation();
+const Home = lazy(() => import('./Pages/Home'));
+const Publications = lazy(() => import('./Pages/Publications'));
+const Courses = lazy(() => import('./Pages/Courses'));
+const Research = lazy(() => import('./Pages/Research'));
+const JoinUs = lazy(() => import('./Pages/JoinUs'));
+const News = lazy(() => import('./Pages/News'));
+const People = lazy(() => import('./Pages/People'));
+const Code = lazy(() => import('./Pages/Code'));
+const Datasets = lazy(() => import('./Pages/Datasets'));
 
-  return (
-    <>
-      <Navbar />
-      <Routes location={location} key={location.pathname}>
-        <Route path="*" element={<LogoHome />} />
-        <Route path="/" element={<LogoHome />} />
-        <Route path="/home" element={<LogoHome />} />
+const RouteFallback = () => (
+  <div className="route-fallback" role="status" aria-live="polite">
+    <span className="sr-only">Loading…</span>
+  </div>
+);
+
+const App = () => (
+  <>
+    <Navbar />
+    <Suspense fallback={<RouteFallback />}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/publications" element={<Publications />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/research" element={<Research />} />
@@ -29,9 +33,10 @@ const App: React.FC = () => {
         <Route path="/people" element={<People />} />
         <Route path="/code" element={<Code />} />
         <Route path="/datasets" element={<Datasets />} />
+        <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
-    </>
-  );
-};
+    </Suspense>
+  </>
+);
 
 export default App;
