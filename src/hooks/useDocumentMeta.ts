@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 interface DocumentMeta {
   title: string;
   description?: string;
+  absoluteTitle?: boolean;
 }
 
 const DEFAULT_TITLE = 'Biomedical Perception & Intelligence Lab';
@@ -23,14 +24,15 @@ const setMetaTag = (name: string, content: string): (() => void) => {
   };
 };
 
-export const useDocumentMeta = ({ title, description }: DocumentMeta): void => {
+export const useDocumentMeta = ({ title, description, absoluteTitle }: DocumentMeta): void => {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = title ? `${title} · ${DEFAULT_TITLE}` : DEFAULT_TITLE;
+    if (absoluteTitle) document.title = title || DEFAULT_TITLE;
+    else document.title = title ? `${title} · ${DEFAULT_TITLE}` : DEFAULT_TITLE;
     const restore = description ? setMetaTag('description', description) : undefined;
     return () => {
       document.title = previousTitle;
       restore?.();
     };
-  }, [title, description]);
+  }, [title, description, absoluteTitle]);
 };

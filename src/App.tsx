@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Navbar from './Route/Navbar';
+import { useCanonical } from './hooks/useCanonical';
 
 const Home = lazy(() => import('./Pages/Home'));
 const Publications = lazy(() => import('./Pages/Publications'));
@@ -18,25 +19,29 @@ const RouteFallback = () => (
   </div>
 );
 
-const App = () => (
-  <>
-    <Navbar />
-    <Suspense fallback={<RouteFallback />}>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/publications" element={<Publications />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/research" element={<Research />} />
-        <Route path="/join-us" element={<JoinUs />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/people" element={<People />} />
-        <Route path="/code" element={<Code />} />
-        <Route path="/datasets" element={<Datasets />} />
-        <Route path="*" element={<Navigate to="/home" replace />} />
-      </Routes>
-    </Suspense>
-  </>
-);
+const App = () => {
+  useCanonical();
+
+  return (
+    <>
+      <Navbar />
+      <Suspense fallback={<RouteFallback />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/publications" element={<Publications />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/research" element={<Research />} />
+          <Route path="/join-us" element={<JoinUs />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/people" element={<People />} />
+          <Route path="/code" element={<Code />} />
+          <Route path="/datasets" element={<Datasets />} />
+          <Route path="*" element={<Navigate to="/home" replace />} />
+        </Routes>
+      </Suspense>
+    </>
+  );
+};
 
 export default App;

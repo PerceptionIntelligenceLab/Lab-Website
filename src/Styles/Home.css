@@ -14,6 +14,60 @@
   100% { background-position: 0% 50%; }
 }
 
+.home-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #0aa8b8;
+  margin-bottom: 0.65rem;
+}
+
+.home-card {
+  border: 1px solid #e2e8ef;
+  border-radius: 14px;
+  padding: 1.5rem;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.home-card:hover {
+  border-color: #0ed6e8;
+  box-shadow: 0 8px 28px rgba(14, 214, 232, 0.12);
+  transform: translateY(-2px);
+}
+
+.home-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #0a2540;
+  background: #eef8fa;
+  border: 1px solid #d3edf1;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+
+.home-inline-link {
+  color: #0aa8b8;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.home-inline-link:hover { color: #0ed6e8; }
+
+.home-footer-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.home-footer-link:hover { color: #0ed6e8; }
+
 @media (prefers-reduced-motion: reduce) {
   .hero-gradient-text { animation: none; }
+  .home-card:hover { transform: none; }
 }

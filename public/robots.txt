@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://debeshjha.github.io/MyWebPortfolio/sitemap.xml
+
+Sitemap: https://perceptionintelligencelab.github.io/Lab-Website/sitemap.xml
