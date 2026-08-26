@@ -4,9 +4,10 @@ import { useLocation } from 'react-router-dom';
 const SITE_ORIGIN = 'https://perceptionintelligencelab.github.io';
 
 const buildCanonical = (basename: string, pathname: string): string => {
-  const path = pathname === '/home' ? '/' : pathname;
   const base = basename.endsWith('/') ? basename.slice(0, -1) : basename;
-  return `${SITE_ORIGIN}${base}${path === '/' ? '/' : path}`;
+  const path = pathname === '/home' ? '/' : pathname;
+  const normalized = path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`;
+  return `${SITE_ORIGIN}${base}${normalized}`;
 };
 
 export const useCanonical = (): void => {

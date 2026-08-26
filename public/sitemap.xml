@@ -6,42 +6,42 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://perceptionintelligencelab.github.io/Lab-Website/research</loc>
+    <loc>https://perceptionintelligencelab.github.io/Lab-Website/research/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://perceptionintelligencelab.github.io/Lab-Website/datasets</loc>
+    <loc>https://perceptionintelligencelab.github.io/Lab-Website/datasets/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://perceptionintelligencelab.github.io/Lab-Website/code</loc>
+    <loc>https://perceptionintelligencelab.github.io/Lab-Website/code/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://perceptionintelligencelab.github.io/Lab-Website/publications</loc>
+    <loc>https://perceptionintelligencelab.github.io/Lab-Website/publications/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://perceptionintelligencelab.github.io/Lab-Website/people</loc>
+    <loc>https://perceptionintelligencelab.github.io/Lab-Website/people/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://perceptionintelligencelab.github.io/Lab-Website/news</loc>
+    <loc>https://perceptionintelligencelab.github.io/Lab-Website/news/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://perceptionintelligencelab.github.io/Lab-Website/courses</loc>
+    <loc>https://perceptionintelligencelab.github.io/Lab-Website/courses/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://perceptionintelligencelab.github.io/Lab-Website/join-us</loc>
+    <loc>https://perceptionintelligencelab.github.io/Lab-Website/join-us/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
