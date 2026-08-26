@@ -1,0 +1,1 @@
+import{b as n}from"./react-DVVFCIMz.js";const r="(prefers-reduced-motion: reduce)",a=()=>{const[s,o]=n.useState(()=>typeof window<"u"&&window.matchMedia(r).matches);return n.useEffect(()=>{const e=window.matchMedia(r),t=()=>o(e.matches);return e.addEventListener("change",t),()=>e.removeEventListener("change",t)},[]),s};export{a as u};
